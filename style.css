@@ -57,6 +57,7 @@ header {
 .nav-item {
     margin-left: 25px;
     font-weight: 600;
+    font-size: 0.9rem;
     color: var(--primary-color);
     position: relative; /* 父容器确保相对定位，为下拉菜单定位 */
     cursor: pointer;
