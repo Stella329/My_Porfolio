@@ -373,9 +373,12 @@ footer strong { color: var(--accent-color); }
     margin: 0 15px;
     transition: color 0.3s;
     position: relative; /* 为Tooltip定位做准备 */
-    cursor: help; /* 鼠标变成问号/帮助样式，暗示有信息 */
     display: flex;
     align-items: center;
+}
+/* 鼠标变成问号/帮助样式，暗示有信息 */
+.location-trigger{
+    cursor: help; 
 }
 
 .social-links a:hover, 
