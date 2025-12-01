@@ -109,6 +109,9 @@
 
 
 
+
+
+
         /* --- Dropdown Menu (下拉框) --- */
         .dropdown-content {
             /* 替换 display:none 为 opacity/visibility，支持延迟隐藏 */
@@ -222,18 +225,58 @@
             background: var(--card-bg);
         }
 
+
+
+        /* --- Hero H1 Animation 方案: 聚光灯流光 --- */
+
         .hero h1 {
             font-size: 3rem;
-            margin-bottom: 10px;
-            color: var(--primary-color);
+            margin-bottom: 20px;
             font-weight: 900;
+
+            /* 1. 设置背景渐变：深灰 -> 亮红 -> 深灰 */
+            /* 注意：这里用 background-image 代替 color */
+            background-image: linear-gradient(120deg,
+                    var(--primary-color) 0%,
+                    var(--primary-color) 40%,
+                    var(--accent-color) 50%,
+                    var(--primary-color) 60%,
+                    var(--primary-color) 100%);
+
+            /* 2. 拉大背景尺寸，把红色部分藏在视口之外 */
+            background-size: 200% auto;
+            background-position: 0% center;
+            /* 初始位置 */
+
+            /* 3. 关键技术：把背景裁切到文字上 */
+            /* 核心魔法！告诉浏览器：“请把背景图片（我们准备的那个超大渐变色幕布），只剪裁在文字的轮廓上。” */
+            -webkit-background-clip: text;  /* 兼容旧版浏览器 */
+            background-clip: text;
+
+            /* 4. 文字本身变透明，透出背景 */
+            /* 为了让背景透出来，必须把标题文字本身的颜色设置为透明。--你看到的不是文字的颜色，而是透过透明文字，看到的文字轮廓内的背景图片。 */
+            color: transparent;
+
+            /* 5. 过渡动画 */
+            transition: background-position 0.8s ease; 
+
+            cursor: default;
         }
+
+        .hero h1:hover {
+            /* 悬停时：移动背景位置，让红色光带划过文字 */
+            background-position: 100% center;
+        }
+
+
+
 
         .hero .title {
             font-size: 1.3rem;
             color: var(--accent-color);
             font-weight: 700;
-            margin-bottom: 40px;
+            margin-bottom: 50px;
+            /* 原40px */
             text-transform: uppercase;
             letter-spacing: 1px;
         }
