@@ -309,10 +309,11 @@
 
         /* portfolio link 下划线 */
         /* .portfolio-link-fallback a {
-    color: var(--primary-color);
-    font-weight: 700;
-    border-bottom: 2px solid var(--accent-color);
-} */
+            color: var(--primary-color);
+            font-weight: 700;
+            border-bottom: 2px solid var(--accent-color);
+        } */
+
         .portfolio-link-fallback a:hover {
             background: var(--accent-color);
             color: white;
@@ -440,6 +441,71 @@
             color: var(--accent-color);
         }
 
+
+
+        /* --- Repo Description Tooltip (轻量化 + 3秒延迟版) --- */
+
+        .repo-desc {
+            position: relative;
+            /* 保持原有截断样式 */
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        /* 悬停时的父容器状态 */
+        .repo-desc[data-tooltip]:hover {
+            /* 必须：允许内容溢出，否则提示框会被切掉 */
+            overflow: visible;
+            z-index: 1000;
+        }
+
+        /* 提示框主体 (默认隐藏) */
+        .repo-desc[data-tooltip]::after {
+            content: attr(data-tooltip);
+
+            /* 定位：悬浮在文字上方 */
+            position: absolute;
+            bottom: 100%;
+            /* 在文字头顶 */
+            left: 0;
+            margin-bottom: 5px;
+            /* 留点空隙 */
+
+            /* 尺寸与排版 */
+            max-width: 300px;
+            width: max-content;
+            padding: 6px 10px;
+            font-size: 12px;
+            line-height: 1.4;
+            white-space: normal;
+            /* 允许换行 */
+
+            /* 轻量化外观 */
+            background-color: rgba(0, 0, 0, 0.85);
+            /* 半透明深黑背景 */
+            color: #fff;
+            border-radius: 4px;
+            pointer-events: none;
+            /* 关键：鼠标穿透，防止触发闪烁 */
+
+            /* 初始状态：完全透明 */
+            opacity: 0;
+
+            /* 离开时：立即消失 (无延迟) */
+            transition: opacity 0.2s ease 0s;
+        }
+
+        /* 悬停状态：显示 (带延迟) */
+        .repo-desc[data-tooltip]:hover::after {
+            opacity: 1;
+            /* 进入时：等待 1秒 后，再花 0.3s 慢慢显示 */
+            transition: opacity 0.3s ease 1s;
+        }
+
+
+
+
         /* --- Footer --- */
         footer {
             background: #111;
@@ -460,6 +526,7 @@
             justify-content: center;
             align-items: center;
         }
+
 
         /* 统一链接和Location图标的样式 */
         .social-links a,
@@ -483,6 +550,7 @@
         .location-trigger:hover {
             color: var(--accent-color);
         }
+
 
         /* --- Tooltip (悬停提示框) 样式 --- */
         .location-tooltip {
@@ -687,6 +755,9 @@
             <div class="columns-wrapper">
 
                 <!-- Column 1: Python Projects (演示滚动效果) -->
+
+                <!-- 笔记：’data-tooltip=复制文本‘：利用 CSS 的 attr() 属性配合伪元素 ::after。由于原本的样式里有 overflow: hidden（这是造成省略号的必要条件），需要一个小技巧（在悬停时解除 overflow 限制但用定位覆盖）来实现悬停框。-->
+
                 <div class="project-column">
                     <div class="column-header">
                         <i class="fa-brands fa-python"></i>
@@ -698,29 +769,30 @@
                             target="_blank" class="repo-item">
                             <div class="repo-title">Data Clean & Automation <i class="fa-solid fa-angle-right"></i>
                             </div>
-                            <div class="repo-desc">Collection of cases using python to process and clean data, and more.
+                            <div class="repo-desc"
+                                data-tooltip="Collection of cases using python to process and clean data, and more.">
+                                Collection of cases using python to process and clean data, and more.
                             </div>
                         </a>
                         <!-- Item 2 -->
                         <a href="https://www.linkedin.com/posts/activity-7385747516111163392-zWgd?utm_source=share&utm_medium=member_desktop&rcm=ACoAACRiv0sB5eLT-P790S-AGLtomKvhAembneA"
                             target="_blank" class="repo-item">
                             <div class="repo-title">Snake Game (demo)<i class="fa-solid fa-angle-right"></i></div>
-                            <div class="repo-desc">My snake game show on LinkedIn --It is my first GUI Python Project in
-                                OOP.</div>
+                            <div class="repo-desc">My snake game show on LinkedIn.</div>
                         </a>
                         <!-- Item 3 -->
                         <a href="https://github.com/Stella329/100dPythonProject_D39-40_APICapstone_FlightDealFinder"
                             target="_blank" class="repo-item">
                             <div class="repo-title">Flight Deal Finder (via API)<i class="fa-solid fa-angle-right"></i>
                             </div>
-                            <div class="repo-desc">A simple Flight Deal Finder requests and organizes data from Amadeus
+                            <div class="repo-desc">A Flight Deal Finder using Amadeus
                                 API.</div>
                         </a>
                         <!-- Item 4 (演示滚动) -->
                         <a href="https://github.com/Stella329/100dPythonProject_D28_pomodoro-timer" target="_blank"
                             class="repo-item">
                             <div class="repo-title">Pomodoro Timer <i class="fa-solid fa-angle-right"></i></div>
-                            <div class="repo-desc">I made a simple Pomodoro Timer in python using tkinter.</div>
+                            <div class="repo-desc">A Pomodoro Timer in python using tkinter.</div>
                         </a>
                         <!-- Item 5 (演示滚动) -->
                         <a href="https://github.com/Stella329/100dPythonProject_D22_Easy-Pong-Game_stella"
@@ -743,19 +815,18 @@
                         <a href="https://stella329.github.io/NoteBook04_FullStack_WebDevelopment/02_Full-Stack-WebDev_AG/20.0_SimonGame_withjQuery/"
                             target="_blank" class="repo-item">
                             <div class="repo-title">Simon Game<i class="fa-solid fa-angle-right"></i></div>
-                            <div class="repo-desc">An easy Simon Game with jQuery. See which level you can reach. Have
+                            <div class="repo-desc">An easy Simon Game with jQuery. Have
                                 fun!</div>
 
                             <a href="https://stella329.github.io/NoteBook04_FullStack_WebDevelopment/02_Full-Stack-WebDev_AG/18.0_DrumKit_DOMAdvance/"
                                 target="_blank" class="repo-item">
                                 <div class="repo-title">Drum Kit<i class="fa-solid fa-angle-right"></i></div>
-                                <div class="repo-desc">A Drum Kit mini project. Have fun drumming by click or pressing
-                                    keybords.</div>
+                                <div class="repo-desc">A Drum Kit mini project. Have fun drumming.</div>
                             </a>
                             <a href="https://stella329.github.io/NoteBook04_FullStack_WebDevelopment/02_Full-Stack-WebDev_AG/17.0_TheDiceGame_DOMChallenge/dice"
                                 target="_blank" class="repo-item">
                                 <div class="repo-title">Dice Game<i class="fa-solid fa-angle-right"></i></div>
-                                <div class="repo-desc">A mini dice game website achieved by javascript.</div>
+                                <div class="repo-desc">A mini dice game achieved by javascript.</div>
                             </a>
                     </div>
                 </div>
@@ -771,7 +842,7 @@
                         <a href="https://github.com/Stella329/TP_Meta_GGRateRule/tree/master/TP_GGMetaRateRule_Project"
                             target="_blank" class="repo-item">
                             <div class="repo-title">Raterule XML Cleaner <i class="fa-solid fa-angle-right"></i></div>
-                            <div class="repo-desc">Python script to parse & clean XML Raterule for Google ads.</div>
+                            <div class="repo-desc" data-tooltip="Python script to parse & clean XML Raterule for Google ads.">Python script to parse & clean XML Raterule for Google ads.</div>
                         </a>
                         <a href="#projects" class="repo-item">
                             <div class="repo-title">More to Come <i class="fa-solid fa-angle-right"></i></div>
