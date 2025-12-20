@@ -5,143 +5,230 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Jianying Wang's Portfolio</title>
-    <!-- 引入 Google Fonts: Inter (Tech/Modern font) -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;900&display=swap" rel="stylesheet">
-    <!-- 引入 FontAwesome 图标 -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- 引入外部样式表
-    <link rel="stylesheet" href="style.css"> -->
+
     <style>
-        /* --- CSS 变量 (您指定的工业风配色) --- */
+        /* =========================================
+           1. CSS 变量集中管理 (Color Palette)
+           ========================================= */
         :root {
             --primary-color: #1e1e1e;
-            /* 深黑灰 - 沉稳背景 */
-            --accent-color: #ff3131;
-            /* 亮红 - 视觉焦点 */
-            --bg-color: #f4f4f4;
-            /* 浅灰背景 */
-            --text-color: #333333;
-            --text-light: #666666;
-            --card-bg: #ffffff;
+            --accent-color: #c0211f;
+            --bg-body: #f4f4f4;
+            --bg-card-light: #ffffff;
+            --bg-card-dark: #2a2a2a;
+            --bg-section-dark: #1e1e1e;
+            --bg-tagline: #fdfdfd;
+            --text-main: #333333;
+            --text-secondary: #666666;
+            --text-muted: #999999;
+            --text-light: #ffffff;
+            --text-footer: #888888;
+            --border-light: #eaeaea;
+            --border-dark: #444444;
+            --shadow-card: rgba(0, 0, 0, 0.08);
+            --shadow-hover: rgba(0, 0, 0, 0.15);
+            --scroll-track: #222222;
             --container-width: 1200px;
         }
 
-        /* --- 基础设置 --- */
+        /* =========================================
+           2. 基础重置 & 全局样式
+           ========================================= */
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
+            cursor: none;
         }
 
         body {
             font-family: 'Inter', sans-serif;
             line-height: 1.6;
-            color: var(--text-color);
-            background-color: var(--bg-color);
+            color: var(--text-main);
+            background-color: var(--bg-body);
+            overflow-x: hidden;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            /* 确保页面至少占满屏幕，防止 Footer 上浮 */
         }
 
         a {
             text-decoration: none;
             color: inherit;
             transition: 0.3s;
-            font-size: 0.9rem;
         }
 
         ul {
             list-style: none;
         }
 
-        /* --- 布局容器 --- */
+        @media (pointer: coarse) {
+            * {
+                cursor: auto !important;
+            }
+
+            .cursor-dot,
+            .cursor-circle {
+                display: none !important;
+            }
+        }
+
         .container {
             max-width: var(--container-width);
             margin: 0 auto;
             padding: 0 20px;
         }
 
-        /* --- Header / 导航 --- */
+        /* =========================================
+           3. Custom Cursor
+           ========================================= */
+        .cursor-dot,
+        .cursor-circle {
+            position: fixed;
+            top: 0;
+            left: 0;
+            transform: translate(-50%, -50%);
+            border-radius: 50%;
+            z-index: 9999;
+            pointer-events: none;
+        }
+
+        .cursor-dot {
+            width: 8px;
+            height: 8px;
+            background-color: var(--accent-color);
+            transition: width 0.3s, height 0.3s, background-color 0.3s;
+        }
+
+        .cursor-circle {
+            width: 30px;
+            height: 30px;
+            border: 1px solid var(--accent-color);
+            transition: width 0.3s, height 0.3s, border-color 0.3s, background-color 0.3s;
+            transition-timing-function: cubic-bezier(0.25, 1, 0.5, 1);
+        }
+
+        body.hovering-link .cursor-dot {
+            opacity: 0;
+        }
+
+        body.hovering-link .cursor-circle {
+            width: 50px;
+            height: 50px;
+            background-color: rgba(192, 33, 31, 0.1);
+            border-color: transparent;
+        }
+
+        /* =========================================
+           4. Scroll Reveal Animation
+           ========================================= */
+        .reveal-section {
+            opacity: 0;
+            transform: translateY(50px);
+            transition: all 0.8s cubic-bezier(0.25, 0.8, 0.25, 1);
+        }
+
+        .reveal-section.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* =========================================
+           5. Header & Nav
+           ========================================= */
         header {
-            background: var(--card-bg);
+            background: var(--bg-card-light);
             border-bottom: 2px solid var(--accent-color);
-            /* 顶部红线装饰 */
             padding: 15px 0;
+
+            /* [FIXED] 修复 Sticky 失效问题 */
             position: sticky;
             top: 0;
-            z-index: 1000;
+            z-index: 900;
+
+            /* [FIXED] 删除了 overflow: hidden，确保 Dropdown 菜单可见 */
+            /* position: relative;  <-- 删除这行，因为 sticky 本身就是定位上下文 */
         }
 
         .nav-wrapper {
             display: flex;
             justify-content: space-between;
             align-items: center;
+            position: relative;
+            z-index: 2;
+            /* 确保内容在 Canvas 之上 */
         }
 
+        /* Logo 流光样式 */
         .logo {
             font-size: 1.3rem;
             font-weight: 800;
-            color: var(--primary-color);
+            color: transparent;
+            padding: 5px 10px;
+            border-radius: 4px;
+            position: relative;
+            background-image: linear-gradient(120deg,
+                    var(--primary-color) 0%,
+                    var(--primary-color) 40%,
+                    var(--accent-color) 50%,
+                    var(--primary-color) 60%,
+                    var(--primary-color) 100%);
+            background-size: 200% auto;
+            background-position: 0% center;
+            -webkit-background-clip: text;
+            background-clip: text;
+            transition: background-position 0.8s ease;
         }
 
         .logo span {
-            color: var(--accent-color);
+            font-weight: 700;
+            color: var(--accent-color)
         }
 
-        /* Stella 用红色高亮 */
+        .logo:hover {
+            background-position: 100% center;
+        }
 
         .nav-links {
             display: flex;
             align-items: center;
         }
 
-        /* 父容器确保相对定位 */
         .nav-item {
             margin-left: 25px;
-            font-weight: 600;
-            font-size: 0.9rem;
+            font-weight: 700;
+            font-size: 1rem;
             color: var(--primary-color);
             position: relative;
-            /* 父容器确保相对定位，为下拉菜单定位 */
-            cursor: pointer;
         }
 
         .nav-item:hover {
             color: var(--accent-color);
         }
 
-
-
-
-
-
-        /* --- Dropdown Menu (下拉框) --- */
+        /* Dropdown 样式 */
         .dropdown-content {
-            /* 替换 display:none 为 opacity/visibility，支持延迟隐藏 */
             opacity: 0;
             visibility: hidden;
             pointer-events: none;
             transform: translateY(-8px);
-
             position: absolute;
             right: 0;
             top: 100%;
-            background-color: var(--card-bg);
+            background-color: var(--bg-card-light);
             min-width: 220px;
-            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+            box-shadow: 0 8px 16px var(--shadow-hover);
             border-radius: 8px;
             padding: 15px;
             border-top: 3px solid var(--accent-color);
             z-index: 1001;
-            margin-top: 0px;
-            /* margin不会0的话，会造成鼠标移动悬窗消失 */
-
-            /* 关键：过渡动画，隐藏时延迟 visibility 改变 */
-            transition:
-                opacity 180ms ease,
-                transform 180ms ease,
-                visibility 0s linear 180ms;
+            transition: opacity 180ms ease, transform 180ms ease, visibility 0s linear 180ms;
         }
 
         .dropdown-content::before {
-            /* 小三角箭头 */
             content: "";
             position: absolute;
             top: -10px;
@@ -151,41 +238,20 @@
             border-color: transparent transparent var(--accent-color) transparent;
         }
 
-        /* 鼠标悬停显示：立即变为可见、可点击，不延迟 visibility 改变 */
         .nav-item:hover .dropdown-content {
             opacity: 1;
             visibility: visible;
             pointer-events: auto;
             transform: translateY(0);
-
-            /* 显示时立即改变，无延迟 */
-            transition:
-                opacity 180ms ease 0s,
-                transform 180ms ease 0s,
-                visibility 0s linear 0s;
-            /* ← 改这个数字，增加悬停 */
+            transition: opacity 180ms ease, transform 180ms ease, visibility 0s linear;
         }
-
-        /* 额外：支持键盘 Tab 访问 (可选，但建议加上便于无障碍) */
-        .nav-item:focus-within .dropdown-content {
-            opacity: 1;
-            visibility: visible;
-            pointer-events: auto;
-            transform: translateY(0);
-
-            transition:
-                opacity 180ms ease 0s,
-                transform 180ms ease 0s,
-                visibility 0s linear 0s;
-        }
-
 
         .contact-row {
             display: flex;
             align-items: center;
             margin-bottom: 12px;
             font-size: 0.9rem;
-            color: var(--text-color);
+            color: var(--text-main);
         }
 
         .contact-row:last-child {
@@ -198,85 +264,57 @@
             font-size: 1.1rem;
         }
 
-        /* 基础：所有 contact-row hover 时，span 变色并下划线 */
         .contact-row:hover span {
             color: var(--accent-color);
             text-decoration: underline;
         }
 
-        /* 覆盖：location 行 hover 时，span 不变色，不下划线 */
         .contact-row.location:hover span {
             color: inherit;
-            /* 恢复原颜色 */
             text-decoration: none;
-            /* 明确移除下划线 */
-            cursor: default;
-            /* 恢复默认箭头光标 */
         }
 
-
-
-
-
-        /* --- Hero Section (个人简介) --- */
+        /* =========================================
+           6. Hero Section
+           ========================================= */
         .hero {
             text-align: center;
-            padding: 100px 20px;
-            background: var(--card-bg);
+            padding: 120px 20px;
+            background: var(--bg-card-light);
+            position: relative;
+            overflow: hidden;
         }
 
+        /* 通用 Canvas 样式 */
+        .bg-canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            pointer-events: none;
+            opacity: 0.6;
+        }
 
-
-        /* --- Hero H1 Animation 方案: 聚光灯流光 --- */
+        .hero-content {
+            position: relative;
+            z-index: 1;
+        }
 
         .hero h1 {
-            font-size: 3rem;
+            font-size: 3.5rem;
             margin-bottom: 20px;
             font-weight: 900;
-
-            /* 1. 设置背景渐变：深灰 -> 亮红 -> 深灰 */
-            /* 注意：这里用 background-image 代替 color */
-            background-image: linear-gradient(120deg,
-                    var(--primary-color) 0%,
-                    var(--primary-color) 40%,
-                    var(--accent-color) 50%,
-                    var(--primary-color) 60%,
-                    var(--primary-color) 100%);
-
-            /* 2. 拉大背景尺寸，把红色部分藏在视口之外 */
-            background-size: 200% auto;
-            background-position: 0% center;
-            /* 初始位置 */
-
-            /* 3. 关键技术：把背景裁切到文字上 */
-            /* 核心魔法！告诉浏览器：“请把背景图片（我们准备的那个超大渐变色幕布），只剪裁在文字的轮廓上。” */
-            -webkit-background-clip: text;  /* 兼容旧版浏览器 */
-            background-clip: text;
-
-            /* 4. 文字本身变透明，透出背景 */
-            /* 为了让背景透出来，必须把标题文字本身的颜色设置为透明。--你看到的不是文字的颜色，而是透过透明文字，看到的文字轮廓内的背景图片。 */
-            color: transparent;
-
-            /* 5. 过渡动画 */
-            transition: background-position 0.8s ease; 
-
-            cursor: default;
+            color: var(--primary-color);
+            letter-spacing: -1px;
         }
-
-        .hero h1:hover {
-            /* 悬停时：移动背景位置，让红色光带划过文字 */
-            background-position: 100% center;
-        }
-
-
-
 
         .hero .title {
             font-size: 1.3rem;
             color: var(--accent-color);
             font-weight: 700;
             margin-bottom: 50px;
-            /* 原40px */
             text-transform: uppercase;
             letter-spacing: 1px;
         }
@@ -285,12 +323,12 @@
             max-width: 800px;
             margin: 0 auto;
             text-align: left;
-            background: #fdfdfd;
+            background: var(--bg-tagline);
             padding: 40px;
-            border-radius: 0;
-            /* 更硬朗的风格 */
-            border-left: 6px solid var(--accent-color);
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+            border: none;
+            box-shadow: inset 6px 0 0 var(--accent-color), 0 10px 30px var(--shadow-card);
+            position: relative;
+            transition: box-shadow 0.4s ease, transform 0.3s ease;
         }
 
         .tagline-box p {
@@ -300,7 +338,7 @@
         }
 
         .tagline-box strong {
-            color: var(--text-color);
+            color: var(--text-main);
             font-weight: 700;
         }
 
@@ -309,197 +347,79 @@
             font-weight: 700;
         }
 
-
-
-
-        /* --- Hero Animation: 隐形锚点 + 3px加粗边框 --- */
-        /* 0s - 0.5s：左侧红条平滑向左收缩消失。
-        0.5s：左上和右下角出现 3px 厚度的“L”形锚点。
-        0.5s - 2.0s（耗时1.5s）：锚点横向延展。
-        2.0s - 3.5s（耗时1.5s）：锚点纵向延展，闭合为完整边框。*/
-
-
-        .tagline-box {
-            position: relative;
-            border: none;
-            /* 初始状态：显示红条 (用内阴影模拟) */
-            box-shadow: inset 6px 0 0 var(--accent-color);
-
-            /* 离开时：红条恢复 (0.4s) */
-            transition: box-shadow 0.4s ease, transform 0.3s ease;
-        }
-
-        /* 定义伪元素 (锚点) */
-        .tagline-box::before,
-        .tagline-box::after {
-            content: "";
-            position: absolute;
-
-            /* 初始锚点尺寸 */
-            width: 20px;
-            height: 20px;
-
-            /* --- 修改点 1: 边框加粗为 3px --- */
-            border: 3px solid var(--primary-color);
-            box-sizing: border-box;
-            pointer-events: none;
-
-            /* 初始完全透明 (隐藏) */
-            opacity: 0;
-
-            /* 离开动画：迅速消失，不要挡路 */
-            transition:
-                opacity 0.2s ease,
-                width 0.5s ease,
-                height 0.5s ease;
-        }
-
-        /* 左上角锚点 */
-        .tagline-box::before {
-            top: 0;
-            left: 0;
-            border-right: none;
-            border-bottom: none;
-        }
-
-        /* 右下角锚点 */
-        .tagline-box::after {
-            bottom: 0;
-            right: 0;
-            border-top: none;
-            border-left: none;
-        }
-
-        /* --- 鼠标悬停触发动画 --- */
-
         .tagline-box:hover {
-            /* 1. 左侧红条平滑向左收缩消失 (耗时 0.5s) */
-            box-shadow: inset 0 0 0 var(--accent-color);
+            box-shadow: inset 0 0 0 var(--accent-color), 0 15px 40px var(--shadow-hover);
             transform: translateY(-3px);
-
-            /* 此时红条正在消失，但锚点还没出现 */
         }
 
-        .tagline-box:hover::before,
-        .tagline-box:hover::after {
-            /* 2. 激活状态：透明度变为 1，尺寸撑满 */
-            opacity: 1;
-            width: 100%;
-            height: 100%;
-
-            /* --- 关键修改点 2: 动画时间轴编排 --- */
-            /* transition 简写顺序: property duration timing-function delay */
-            transition:
-                /* Opacity: 等 0.1s (红条消失后)，浮现(0.3s淡出) */
-                opacity 0.5s ease 0.1s,
-
-                /* Width: 等 1s (与浮现同时)，花 2s 变宽 */
-                width 2s ease 1s,
-
-                /* Height: 等 2.0s (0.5s等待 + 1.5s变宽后)，再花 1.5s 变高 */
-                height 2s ease 2.5s;
-        }
-
-
-
-
-
-
-        /* --- Portfolio Embed Section --- */
+        /* =========================================
+           7. Portfolio & Projects Section
+           ========================================= */
         .portfolio-section {
             padding: 80px 0;
-            background: #f0f0f0;
+            background: var(--bg-body);
+            position: relative;
+            overflow: hidden;
         }
 
+        .portfolio-section .container {
+            position: relative;
+            z-index: 2;
+        }
 
-        /* --- Section Title 交互动画优化 (Smooth & Gentle) --- */
-        /* 1. transition: 0.6s：通常网页动画是 0.3s，这里特意延长一倍，消除了“机械感”，增加了“呼吸感”。
-        2. cubic-bezier(...)：这不是匀速运动。线条会轻快地伸出去，但在接近终点时会非常细腻地慢下来（Soft landing），这种缓入缓出的效果最符合“温柔”的定义。
-        3. border-radius: 2px：加了一点微小的圆角，让红线的两端不再是锋利的直角，视觉上更亲和。 */
+        .projects-section {
+            padding: 80px 0;
+            background: var(--bg-section-dark);
+            color: var(--text-light);
+        }
 
         .section-title {
             text-align: center;
             font-size: 2.2rem;
             margin-bottom: 50px;
             color: var(--primary-color);
-
-            /* 定位设置保持不变 */
             position: relative;
             display: inline-block;
             left: 50%;
             transform: translateX(-50%);
-
-            /* 增加光标提示，暗示可交互 */
             cursor: default;
         }
 
-        /* 下划线装饰 */
+        .projects-section .section-title {
+            color: var(--text-light);
+        }
+
         .section-title::after {
             content: '';
             display: block;
-
-            /* 初始宽度 */
             width: 60px;
             height: 4px;
             background: var(--accent-color);
             margin: 10px auto 0;
-
-            /* --- 动画核心设置 --- */
-            /* 0.6s 的时长保证了过程不急促 (温柔) */
-            /* cubic-bezier(0.25, 0.8, 0.25, 1) 是经典的平滑曲线，
-       特点是：启动稍快，然后非常缓慢地减速停止，像刹车一样丝滑 */
-            transition: width 0.6s cubic-bezier(0.25, 0.8, 0.25, 1);
-
-            /* 保持圆角，会让线条伸展时看起来更圆润柔和，不锐利 */
             border-radius: 2px;
+            transition: width 0.6s cubic-bezier(0.25, 0.8, 0.25, 1);
         }
 
-        /* 鼠标悬停时的状态 */
         .section-title:hover::after {
-            /* 宽度拉长到 140px (约原来的2倍多)，幅度适中 */
             width: 140px;
         }
-
-
 
         .embed-container {
             max-width: 1000px;
             margin: 0 auto;
-            background: white;
+            background: var(--bg-card-light);
             padding: 10px;
-            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 15px 40px var(--shadow-hover);
             border-radius: 12px;
         }
 
-        /* portfolio link 效果 */
         .portfolio-link-fallback {
             text-align: center;
             margin-top: 20px;
         }
 
-        /* portfolio link 下划线 */
-        /* .portfolio-link-fallback a {
-            color: var(--primary-color);
-            font-weight: 700;
-            border-bottom: 2px solid var(--accent-color);
-        } */
-
         .portfolio-link-fallback a:hover {
             background: var(--accent-color);
-            color: white;
-        }
-
-
-
-        /* --- Tech & Code Projects Section (3栏布局 + 滚动功能) --- */
-        .projects-section {
-            padding: 80px 0;
-            background: var(--primary-color);
-            /* 深色背景 */
-            color: white;
-        }
-
-        .projects-section .section-title {
             color: white;
         }
 
@@ -509,19 +429,14 @@
             gap: 30px;
         }
 
-        /* 列容器 */
         .project-column {
-            background: #2a2a2a;
-            /* 稍浅一点的黑灰色 */
+            background: var(--bg-card-dark);
             border-radius: 8px;
             overflow: hidden;
             border-top: 4px solid var(--accent-color);
-
-            /* 添加滚动所需的布局属性 */
             display: flex;
             flex-direction: column;
             max-height: 500px;
-            /* 限制高度以触发滚动 */
         }
 
         .column-header {
@@ -529,9 +444,8 @@
             background: #333;
             display: flex;
             align-items: center;
-            border-bottom: 1px solid #444;
+            border-bottom: 1px solid var(--border-dark);
             flex-shrink: 0;
-            /* 防止标题被压缩 */
         }
 
         .column-header i {
@@ -543,28 +457,23 @@
         .column-header h3 {
             font-size: 1.2rem;
             font-weight: 600;
-            color: white;
+            color: var(--text-light);
         }
 
-        /* 滚动新闻列表样式 */
         .repo-list {
             padding: 0;
             overflow-y: auto;
-            /* 开启垂直滚动 */
             flex-grow: 1;
-
-            /* 滚动条样式 (极客风) */
             scrollbar-width: thin;
-            scrollbar-color: var(--accent-color) #222;
+            scrollbar-color: var(--accent-color) var(--scroll-track);
         }
 
-        /* Webkit 浏览器 (Chrome, Safari) 自定义滚动条 */
         .repo-list::-webkit-scrollbar {
             width: 6px;
         }
 
         .repo-list::-webkit-scrollbar-track {
-            background: #222;
+            background: var(--scroll-track);
         }
 
         .repo-list::-webkit-scrollbar-thumb {
@@ -586,9 +495,7 @@
         .repo-item:hover {
             background-color: #3d3d3d;
             padding-left: 25px;
-            /* 悬停时稍微右移 */
             border-left: 3px solid var(--accent-color);
-            /* 添加左侧高亮条 */
         }
 
         .repo-title {
@@ -602,90 +509,60 @@
 
         .repo-desc {
             font-size: 0.85rem;
-            color: #999;
-            /* 移除 nowrap，允许简短的换行，或者保留省略号看您喜好 */
+            color: var(--text-muted);
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
+            position: relative;
         }
 
         .repo-item:hover .repo-title {
             color: var(--accent-color);
         }
 
-
-
-        /* --- Repo Description Tooltip 延长文字提示框 (轻量化 + 3秒延迟版) --- */
-
-        .repo-desc {
-            position: relative;
-            /* 保持原有截断样式 */
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
-
-        /* 悬停时的父容器状态 */
         .repo-desc[data-tooltip]:hover {
-            /* 必须：允许内容溢出，否则提示框会被切掉 */
             overflow: visible;
             z-index: 1000;
         }
 
-        /* 提示框主体 (默认隐藏) */
         .repo-desc[data-tooltip]::after {
             content: attr(data-tooltip);
-
-            /* 定位：悬浮在文字上方 */
             position: absolute;
             bottom: 100%;
-            /* 在文字头顶 */
             left: 0;
             margin-bottom: 5px;
-            /* 留点空隙 */
-
-            /* 尺寸与排版 */
             max-width: 300px;
             width: max-content;
             padding: 6px 10px;
             font-size: 12px;
-            line-height: 1.4;
-            white-space: normal;
-            /* 允许换行 */
-
-            /* 轻量化外观 */
             background-color: rgba(0, 0, 0, 0.85);
-            /* 半透明深黑背景 */
             color: #fff;
             border-radius: 4px;
             pointer-events: none;
-            /* 关键：鼠标穿透，防止触发闪烁 */
-
-            /* 初始状态：完全透明 */
             opacity: 0;
-
-            /* 离开时：立即消失 (无延迟) */
             transition: opacity 0.2s ease 0s;
+            white-space: normal;
+            line-height: 1.4;
         }
 
-        /* 悬停状态：显示 (带延迟) */
         .repo-desc[data-tooltip]:hover::after {
             opacity: 1;
-            /* 进入时：等待 1秒 后，再花 0.3s 慢慢显示 */
             transition: opacity 0.3s ease 1s;
         }
 
-
-
-
-        /* --- Footer --- */
+        /* =========================================
+           8. Footer (修复版)
+           ========================================= */
+        /* [FIXED] 移除了 reveal-section 类，防止加载时的白边闪烁 */
         footer {
             background: #111;
-            color: #888;
+            color: var(--text-footer);
             text-align: center;
             padding: 40px 0;
             font-size: 0.9rem;
             border-top: 4px solid var(--accent-color);
+            margin-top: auto;
+            /* 确保置底 */
         }
 
         footer strong {
@@ -699,21 +576,17 @@
             align-items: center;
         }
 
-
-        /* 统一链接和Location图标的样式 */
         .social-links a,
         .location-trigger {
-            color: white;
+            color: var(--text-light);
             font-size: 1.5rem;
             margin: 0 15px;
             transition: color 0.3s;
             position: relative;
-            /* 为Tooltip定位做准备 */
             display: flex;
             align-items: center;
         }
 
-        /* 鼠标变成问号/帮助样式，暗示有信息 */
         .location-trigger {
             cursor: help;
         }
@@ -723,58 +596,47 @@
             color: var(--accent-color);
         }
 
-
-        /* --- Tooltip (悬停提示框) 样式 --- */
         .location-tooltip {
             visibility: hidden;
             width: 260px;
-            /* 提示框宽度 */
-            background-color: var(--primary-color);
-            /* 深色背景 */
+            background-color: var(--bg-section-dark);
             color: #fff;
             text-align: center;
             border-radius: 6px;
             padding: 10px 15px;
-            border: 1px solid #444;
+            border: 1px solid var(--border-dark);
 
-            /* 定位 */
+            /* --- 在这里控制文字大小 --- */
+            font-size: 0.9rem;  /* 建议值：0.8rem 或 12px，您可以调得更小 */
+            line-height: 1.4;   /* 建议同时设置行高，防止文字挤在一起 */
+            /* ----------------------- */
+
             position: absolute;
             z-index: 1;
             bottom: 140%;
-            /* 图标上方 */
             left: 50%;
             transform: translateX(-50%);
-            /* 水平居中 */
-
-            /* 动画效果 */
             opacity: 0;
             transition: opacity 0.3s, transform 0.3s;
-            font-size: 0.85rem;
-            line-height: 1.4;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
             pointer-events: none;
-            /* 防止鼠标移到提示框上时闪烁 */
+            box-shadow: 0 5px 15px var(--shadow-hover);
         }
 
-        /* Tooltip 下方的小三角箭头 */
         .location-tooltip::after {
             content: "";
             position: absolute;
             top: 100%;
-            /* 提示框底部 */
             left: 50%;
             margin-left: -6px;
             border-width: 6px;
             border-style: solid;
-            border-color: var(--primary-color) transparent transparent transparent;
+            border-color: var(--bg-section-dark) transparent transparent transparent;
         }
 
-        /* 悬停时显示 Tooltip */
         .location-trigger:hover .location-tooltip {
             visibility: visible;
             opacity: 1;
             transform: translateX(-50%) translateY(-5px);
-            /* 微微上浮动画 */
         }
 
         .footer-text {
@@ -782,9 +644,6 @@
             opacity: 0.8;
         }
 
-
-
-        /* --- 响应式适配 --- */
         @media (max-width: 768px) {
             .nav-wrapper {
                 flex-direction: column;
@@ -809,12 +668,9 @@
             .project-column {
                 max-height: none;
             }
-
-            /* 手机端取消固定高度 */
         }
     </style>
 
-    <!-- Microsoft Clarity 251128/17:28-->
     <script type="text/javascript">
         (function (c, l, a, r, i, t, y) {
             c[a] = c[a] || function () { (c[a].q = c[a].q || []).push(arguments) };
@@ -822,85 +678,75 @@
             y = l.getElementsByTagName(r)[0]; y.parentNode.insertBefore(t, y);
         })(window, document, "clarity", "script", "ud91rv0370");
     </script>
-
 </head>
 
 <body>
 
-    <!-- Header -->
+    <div class="cursor-dot" id="cursor-dot"></div>
+    <div class="cursor-circle" id="cursor-circle"></div>
+
     <header>
+        <canvas id="header-canvas" class="bg-canvas"></canvas>
+
         <div class="container nav-wrapper">
-            <!-- Logo区域 -->
-            <div class="logo">Jianying Wang <span>(Stella)</span></div>
+            <div class="logo hover-trigger">Jianying Wang <span>(Stella)</span></div>
 
-            <!-- 导航菜单 -->
             <nav class="nav-links">
-                <a href="#about" class="nav-item">About Me</a>
-                <a href="#portfolio" class="nav-item">Portfolio</a>
-                <a href="#projects" class="nav-item">Showcase</a>
-                <!-- <a href="#contact" class="nav-item">Contact</a> -->
+                <a href="#about" class="nav-item hover-trigger">About Me</a>
+                <a href="#portfolio" class="nav-item hover-trigger">Portfolio</a>
+                <a href="#projects" class="nav-item hover-trigger">Showcase</a>
 
-                <!-- 下拉式 Contact + 导航跳转-->
-                <div class="nav-item dropdown">
+                <div class="nav-item dropdown hover-trigger">
                     <span>Contact<i class="fa-solid fa-caret-down"
                             style="font-size: 0.8em; margin-left: 5px;"></i></span>
-
                     <div class="dropdown-content">
                         <a href="mailto:stella33299@gmail.com" class="contact-row">
-                            <i class="fa-solid fa-envelope"></i>
-                            <span>Email Me</span>
+                            <i class="fa-solid fa-envelope"></i><span>Email Me</span>
                         </a>
                         <a href="https://www.linkedin.com/in/jianying-wang-4b7532150" target="_blank"
                             class="contact-row">
-                            <i class="fa-brands fa-linkedin"></i>
-                            <span>LinkedIn Me</span>
+                            <i class="fa-brands fa-linkedin"></i><span>LinkedIn Me</span>
                         </a>
                         <a href="https://github.com/Stella329" target="_blank" class="contact-row">
-                            <i class="fa-brands fa-github"></i>
-                            <span>GitHub</span>
+                            <i class="fa-brands fa-github"></i><span>GitHub</span>
                         </a>
                         <div class="contact-row location">
-                            <i class="fa-solid fa-location-dot"></i>
-                            <span>Göteborg, Sweden</span>
+                            <i class="fa-solid fa-location-dot"></i><span>Göteborg, Sweden</span>
                         </div>
                     </div>
                 </div>
-
             </nav>
         </div>
     </header>
 
-    <!-- Hero Section (简介) -->
-    <section id="about" class="hero">
-        <div class="container">
+    <section id="about" class="hero reveal-section">
+        <canvas id="hero-canvas" class="bg-canvas"></canvas>
+
+        <div class="container hero-content">
             <h1>Jianying Wang (Stella)</h1>
             <div class="title">Product Solutions & AdsTech | Bridge-Person (Tech & Product & Business) </div>
 
             <div class="tagline-box">
                 <p>I am:</p>
                 <p>A <span><strong>Product & MarTech</strong></span> <strong>Solution Expert</strong> driving
-                    performance through <strong>Technical
-                        Fluency</strong>.</p>
+                    performance through <strong>Technical Fluency</strong>.</p>
                 <p>A <span><strong>Bridge</strong></span> connecting <strong>Product & Tech & People</strong>.</p>
                 <p>A <span><strong>Full-Stack Thinker</strong></span> solving problems from <strong>Product, Tech to
                         Business</strong>.</p>
                 <p>A <span><strong>Coordinator and Team Player</strong></span> mastering <strong>cross-functional &
-                        cross-market
-                        collaboration</strong>.</p>
+                        cross-market collaboration</strong>.</p>
             </div>
         </div>
     </section>
 
-    <!-- Portfolio Embed Section (作品集) -->
-    <section id="portfolio" class="portfolio-section">
+    <section id="portfolio" class="portfolio-section reveal-section">
+        <canvas id="portfolio-canvas" class="bg-canvas"></canvas>
+
         <div class="container">
             <h2 class="section-title">My Portfolio</h2>
-
-            <!-- Canva 嵌入容器 -->
             <div class="embed-container">
-                <div style="position: relative; width: 100%; height: 0; padding-top: 56.2500%;
-                padding-bottom: 0; box-shadow: 0 2px 8px 0 rgba(63,69,81,0.16); margin-top: 0; margin-bottom: 0; overflow: hidden;
-                border-radius: 8px; will-change: transform;">
+                <div
+                    style="position: relative; width: 100%; height: 0; padding-top: 56.2500%; padding-bottom: 0; box-shadow: 0 2px 8px 0 rgba(63,69,81,0.16); margin-top: 0; margin-bottom: 0; overflow: hidden; border-radius: 8px; will-change: transform;">
                     <iframe loading="lazy"
                         style="position: absolute; width: 100%; height: 100%; top: 0; left: 0; border: none; padding: 0;margin: 0;"
                         src="https://www.canva.com/design/DAG5jXiyFGU/TVbh7uIpAGmNJa_SXPkFSw/view?embed"
@@ -908,103 +754,81 @@
                     </iframe>
                 </div>
             </div>
-
             <div class="portfolio-link-fallback">
                 <a href="https://www.canva.com/design/DAG5jXiyFGU/TVbh7uIpAGmNJa_SXPkFSw/view?utm_content=DAG5jXiyFGU&amp;utm_campaign=designshare&amp;utm_medium=embeds&amp;utm_source=link"
-                    target="_blank" rel="noopener">
+                    target="_blank" rel="noopener" class="hover-trigger">
                     View Full Screen <i class="fa-solid fa-arrow-up-right-from-square"></i>
                 </a>
             </div>
-
         </div>
     </section>
 
-    <!-- Tech & Code Projects Section (滚动列表式) -->
-    <section id="projects" class="projects-section">
+    <section id="projects" class="projects-section reveal-section">
         <div class="container">
             <h2 class="section-title">Tech Showcase & Code Hub</h2>
-
             <div class="columns-wrapper">
-
-                <!-- Column 1: Python Projects (演示滚动效果) -->
-
-                <!-- 笔记：’data-tooltip=复制文本‘：利用 CSS 的 attr() 属性配合伪元素 ::after。由于原本的样式里有 overflow: hidden（这是造成省略号的必要条件），需要一个小技巧（在悬停时解除 overflow 限制但用定位覆盖）来实现悬停框。-->
-
                 <div class="project-column">
                     <div class="column-header">
                         <i class="fa-brands fa-python"></i>
                         <h3>Python & Data Automation</h3>
                     </div>
                     <div class="repo-list">
-                        <!-- Item 1 -->
                         <a href="https://github.com/Stella329/NoteBook02_py_FinlandMooc2025/tree/master/Showcases"
-                            target="_blank" class="repo-item">
+                            target="_blank" class="repo-item hover-trigger">
                             <div class="repo-title">Data Clean & Automation <i class="fa-solid fa-angle-right"></i>
                             </div>
                             <div class="repo-desc"
                                 data-tooltip="Collection of cases using python to process and clean data, and more.">
-                                Collection of cases using python to process and clean data, and more.
-                            </div>
+                                Collection of cases using python to process and clean data, and more.</div>
                         </a>
-                        <!-- Item 2 -->
-                        <a href="https://www.linkedin.com/posts/activity-7385747516111163392-zWgd?utm_source=share&utm_medium=member_desktop&rcm=ACoAACRiv0sB5eLT-P790S-AGLtomKvhAembneA"
-                            target="_blank" class="repo-item">
+                        <a href="https://www.linkedin.com/posts/activity-7385747516111163392-zWgd" target="_blank"
+                            class="repo-item hover-trigger">
                             <div class="repo-title">Snake Game (demo)<i class="fa-solid fa-angle-right"></i></div>
                             <div class="repo-desc">My snake game show on LinkedIn.</div>
                         </a>
-                        <!-- Item 3 -->
                         <a href="https://github.com/Stella329/100dPythonProject_D39-40_APICapstone_FlightDealFinder"
-                            target="_blank" class="repo-item">
+                            target="_blank" class="repo-item hover-trigger">
                             <div class="repo-title">Flight Deal Finder (via API)<i class="fa-solid fa-angle-right"></i>
                             </div>
-                            <div class="repo-desc">A Flight Deal Finder using Amadeus
-                                API.</div>
+                            <div class="repo-desc">A Flight Deal Finder using Amadeus API.</div>
                         </a>
-                        <!-- Item 4 (演示滚动) -->
                         <a href="https://github.com/Stella329/100dPythonProject_D28_pomodoro-timer" target="_blank"
-                            class="repo-item">
+                            class="repo-item hover-trigger">
                             <div class="repo-title">Pomodoro Timer <i class="fa-solid fa-angle-right"></i></div>
                             <div class="repo-desc">A Pomodoro Timer in python using tkinter.</div>
                         </a>
-                        <!-- Item 5 (演示滚动) -->
                         <a href="https://github.com/Stella329/100dPythonProject_D22_Easy-Pong-Game_stella"
-                            target="_blank" class="repo-item">
+                            target="_blank" class="repo-item hover-trigger">
                             <div class="repo-title">Pong Game (OOP) <i class="fa-solid fa-angle-right"></i></div>
                             <div class="repo-desc">My easy Pong Game using python turtle.</div>
                         </a>
-
                     </div>
                 </div>
 
-                <!-- Column 2: Web / Frontend -->
                 <div class="project-column">
                     <div class="column-header">
                         <i class="fa-brands fa-js"></i>
                         <h3>Web Development & JS</h3>
                     </div>
                     <div class="repo-list">
-
                         <a href="https://stella329.github.io/NoteBook04_FullStack_WebDevelopment/02_Full-Stack-WebDev_AG/20.0_SimonGame_withjQuery/"
-                            target="_blank" class="repo-item">
+                            target="_blank" class="repo-item hover-trigger">
                             <div class="repo-title">Simon Game<i class="fa-solid fa-angle-right"></i></div>
-                            <div class="repo-desc">An easy Simon Game with jQuery. Have
-                                fun!</div>
-
-                            <a href="https://stella329.github.io/NoteBook04_FullStack_WebDevelopment/02_Full-Stack-WebDev_AG/18.0_DrumKit_DOMAdvance/"
-                                target="_blank" class="repo-item">
-                                <div class="repo-title">Drum Kit<i class="fa-solid fa-angle-right"></i></div>
-                                <div class="repo-desc">A Drum Kit mini project. Have fun drumming.</div>
-                            </a>
-                            <a href="https://stella329.github.io/NoteBook04_FullStack_WebDevelopment/02_Full-Stack-WebDev_AG/17.0_TheDiceGame_DOMChallenge/dice"
-                                target="_blank" class="repo-item">
-                                <div class="repo-title">Dice Game<i class="fa-solid fa-angle-right"></i></div>
-                                <div class="repo-desc">A mini dice game achieved by javascript.</div>
-                            </a>
+                            <div class="repo-desc">An easy Simon Game with jQuery. Have fun!</div>
+                        </a>
+                        <a href="https://stella329.github.io/NoteBook04_FullStack_WebDevelopment/02_Full-Stack-WebDev_AG/18.0_DrumKit_DOMAdvance/"
+                            target="_blank" class="repo-item hover-trigger">
+                            <div class="repo-title">Drum Kit<i class="fa-solid fa-angle-right"></i></div>
+                            <div class="repo-desc">A Drum Kit mini project. Have fun drumming.</div>
+                        </a>
+                        <a href="https://stella329.github.io/NoteBook04_FullStack_WebDevelopment/02_Full-Stack-WebDev_AG/17.0_TheDiceGame_DOMChallenge/dice"
+                            target="_blank" class="repo-item hover-trigger">
+                            <div class="repo-title">Dice Game<i class="fa-solid fa-angle-right"></i></div>
+                            <div class="repo-desc">A mini dice game achieved by javascript.</div>
+                        </a>
                     </div>
                 </div>
 
-
-                <!-- Column 3: More Projects -->
                 <div class="project-column">
                     <div class="column-header">
                         <i class="fa-solid fa-server"></i>
@@ -1012,49 +836,190 @@
                     </div>
                     <div class="repo-list">
                         <a href="https://github.com/Stella329/TP_Meta_GGRateRule/tree/master/TP_GGMetaRateRule_Project"
-                            target="_blank" class="repo-item">
+                            target="_blank" class="repo-item hover-trigger">
                             <div class="repo-title">Raterule XML Cleaner <i class="fa-solid fa-angle-right"></i></div>
                             <div class="repo-desc"
                                 data-tooltip="Python script to parse & clean XML Raterule for Google ads.">Python script
                                 to parse & clean XML Raterule for Google ads.</div>
                         </a>
-                        <!-- <a href="#projects" class="repo-item">
-                            <div class="repo-title">More to Come <i class="fa-solid fa-angle-right"></i></div>
-                            <div class="repo-desc">There will be more...</div>
-                        </a> -->
                     </div>
                 </div>
-
             </div>
         </div>
     </section>
 
-
-    <!-- Footer -->
     <footer id="contact">
         <div class="container">
             <div class="social-links">
-                <!-- 原有的社交链接 -->
-                <a href="https://www.linkedin.com/in/jianying-wang-4b7532150" target="_blank" title="LinkedIn"><i
-                        class="fa-brands fa-linkedin"></i></a>
-                <a href="https://github.com/Stella329" target="_blank" title="GitHub"><i
+                <a href="https://www.linkedin.com/in/jianying-wang-4b7532150" target="_blank" title="LinkedIn"
+                    class="hover-trigger"><i class="fa-brands fa-linkedin"></i></a>
+                <a href="https://github.com/Stella329" target="_blank" title="GitHub" class="hover-trigger"><i
                         class="fa-brands fa-github"></i></a>
-                <a href="mailto:stella33299@gmail.com" title="Email"><i class="fa-solid fa-envelope"></i></a>
-
-                <!-- 新增：Location Icon (不跳转，仅悬停) -->
-                <div class="location-trigger">
+                <a href="mailto:stella33299@gmail.com" title="Email" class="hover-trigger"><i
+                        class="fa-solid fa-envelope"></i></a>
+                <div class="location-trigger hover-trigger">
                     <i class="fa-solid fa-location-dot"></i>
-                    <!-- 悬停提示框 -->
                     <span class="location-tooltip">I am currently in Göteborg. <br>Used to live in Shanghai. <br>Open
                         for relocation. 🙋‍♀️</span>
                 </div>
             </div>
-
             <p class="footer-text">© 2025 Jianying Wang. Powered by <strong>Gemini 3</strong> and
-                <strong>Copilot</strong>.
-            </p>
+                <strong>Copilot</strong>.</p>
         </div>
     </footer>
+
+    <script>
+        /* =========================================
+           1. Custom Cursor Logic
+           ========================================= */
+        const cursorDot = document.getElementById('cursor-dot');
+        const cursorCircle = document.getElementById('cursor-circle');
+
+        document.addEventListener('mousemove', (e) => {
+            const posX = e.clientX;
+            const posY = e.clientY;
+            cursorDot.style.left = `${posX}px`;
+            cursorDot.style.top = `${posY}px`;
+            cursorCircle.style.left = `${posX}px`;
+            cursorCircle.style.top = `${posY}px`;
+        });
+
+        const hoverTriggers = document.querySelectorAll('.hover-trigger, a, button, .nav-item, .tagline-box');
+        hoverTriggers.forEach(trigger => {
+            trigger.addEventListener('mouseenter', () => {
+                document.body.classList.add('hovering-link');
+            });
+            trigger.addEventListener('mouseleave', () => {
+                document.body.classList.remove('hovering-link');
+            });
+        });
+
+        /* =========================================
+           2. Scroll Reveal (Intersection Observer)
+           ========================================= */
+        const observerOptions = {
+            threshold: 0.15,
+            rootMargin: "0px 0px -50px 0px"
+        };
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('active');
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, observerOptions);
+        document.querySelectorAll('.reveal-section').forEach(section => {
+            observer.observe(section);
+        });
+
+        /* =================================================================
+           3. Canvas Particle Network Animation
+           ================================================================= */
+        function initParticleNetwork(canvasId, containerSelector) {
+            const canvas = document.getElementById(canvasId);
+            if (!canvas) return;
+
+            const container = document.querySelector(containerSelector);
+            const ctx = canvas.getContext('2d');
+            let width, height;
+            let particles = [];
+            let mouse = { x: null, y: null };
+
+            function resizeCanvas() {
+                width = canvas.width = container.offsetWidth;
+                height = canvas.height = container.offsetHeight;
+            }
+            window.addEventListener('resize', resizeCanvas);
+            resizeCanvas();
+
+            container.addEventListener('mousemove', (e) => {
+                const rect = canvas.getBoundingClientRect();
+                mouse.x = e.clientX - rect.left;
+                mouse.y = e.clientY - rect.top;
+            });
+            container.addEventListener('mouseleave', () => {
+                mouse.x = null;
+                mouse.y = null;
+            });
+
+            class Particle {
+                constructor() {
+                    this.x = Math.random() * width;
+                    this.y = Math.random() * height;
+                    this.vx = (Math.random() - 0.5) * 0.5;
+                    this.vy = (Math.random() - 0.5) * 0.5;
+                    this.size = Math.random() * 2 + 1;
+                }
+                update() {
+                    this.x += this.vx;
+                    this.y += this.vy;
+                    if (this.x < 0 || this.x > width) this.vx *= -1;
+                    if (this.y < 0 || this.y > height) this.vy *= -1;
+                }
+                draw() {
+                    ctx.beginPath();
+                    ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                    ctx.fillStyle = '#ccc';
+                    ctx.fill();
+                }
+            }
+
+            function init() {
+                particles = [];
+                const area = width * height;
+                const particleCount = Math.floor(area / 15000);
+                const count = Math.min(Math.max(particleCount, 20), 80);
+
+                for (let i = 0; i < count; i++) {
+                    particles.push(new Particle());
+                }
+            }
+
+            function animate() {
+                ctx.clearRect(0, 0, width, height);
+                particles.forEach(p => {
+                    p.update();
+                    p.draw();
+                    particles.forEach(p2 => {
+                        const dx = p.x - p2.x;
+                        const dy = p.y - p2.y;
+                        const distance = Math.sqrt(dx * dx + dy * dy);
+                        if (distance < 100) {
+                            ctx.beginPath();
+                            ctx.strokeStyle = `rgba(200, 200, 200, ${1 - distance / 100})`;
+                            ctx.lineWidth = 0.5;
+                            ctx.moveTo(p.x, p.y);
+                            ctx.lineTo(p2.x, p2.y);
+                            ctx.stroke();
+                        }
+                    });
+                    if (mouse.x != null) {
+                        const dx = p.x - mouse.x;
+                        const dy = p.y - mouse.y;
+                        const distance = Math.sqrt(dx * dx + dy * dy);
+                        if (distance < 150) {
+                            ctx.beginPath();
+                            ctx.strokeStyle = `rgba(192, 33, 31, ${1 - distance / 150})`;
+                            ctx.lineWidth = 0.8;
+                            ctx.moveTo(p.x, p.y);
+                            ctx.lineTo(mouse.x, mouse.y);
+                            ctx.stroke();
+                        }
+                    }
+                });
+                requestAnimationFrame(animate);
+            }
+
+            init();
+            animate();
+        }
+
+        initParticleNetwork('hero-canvas', '.hero');
+        initParticleNetwork('header-canvas', 'header');
+        initParticleNetwork('portfolio-canvas', '.portfolio-section');
+
+    </script>
 
 </body>
 
