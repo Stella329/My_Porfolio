@@ -94,7 +94,7 @@ const App: React.FC = () => {
       </section>
 
       {/* Work Section */}
-      <section id="work" className="relative z-10 py-40 border-t border-black/5">
+      <section id="work" className="relative z-10 py-40">
         <div className="container mx-auto px-8 mb-24">
           <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
             <div id="expertise" className="scroll-mt-48">
