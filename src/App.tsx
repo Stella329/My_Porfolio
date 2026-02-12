@@ -20,13 +20,14 @@ const App: React.FC = () => {
       {/* Header / Nav */}
       <header className="fixed top-0 w-full z-50 bg-[#F9F8F6]/40 backdrop-blur-sm">
         <div className="container mx-auto px-8 py-8 flex justify-between items-center">
-          <div
+          <a
+            href="#about"
             className="text-lg font-bold tracking-[0.3em] cursor-pointer group uppercase"
             onMouseEnter={() => setParticleMode('lines')}
             onMouseLeave={() => setParticleMode('idle')}
           >
             Jianying <span style={{ color: COLORS.primary }} className="group-hover:text-black transition-colors duration-500">Wang</span>
-          </div>
+          </a>
           <nav className="hidden md:flex gap-12 items-center">
             {['Expertise', 'Showcase'].map(item => (
               <a
@@ -96,7 +97,7 @@ const App: React.FC = () => {
       <section id="work" className="relative z-10 py-40 border-t border-black/5">
         <div className="container mx-auto px-8 mb-24">
           <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
-            <div>
+            <div id="expertise" className="scroll-mt-48">
               <p className="text-[11px] font-bold uppercase tracking-[0.5em] text-[#D9A299] mb-4">Domains & Expertise</p>
               <h2 className="text-5xl md:text-7xl font-bold tracking-tighter uppercase">Expertise</h2>
             </div>
