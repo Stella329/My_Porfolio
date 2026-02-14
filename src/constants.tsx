@@ -56,9 +56,9 @@ export const CODE_REPOS: ShowcaseRepo[] = [
 ];
 
 export const WEB_REPOS: ShowcaseRepo[] = [
-  { title: 'Martech & API', desc: 'Marketing technology: strategy, integration and automation', link: '#', icon: '🎯' },
-  { title: 'Data & AI', desc: 'Data-driven and AI applications.', link: '#', icon: '📊' },
-  { title: 'Product & Tech', desc: 'Product solutions and tech account management.', link: '#', icon: '📱' },
+  { title: 'Data, Martech, Product', desc: 'API, Data and Product dev: strategy, integration and automation', link: 'https://www.canva.com/design/DAHBUjio2Vw/Ki6l05ZBnUJmHzqnW7LM1A/view?utm_content=DAHBUjio2Vw&utm_campaign=designshare&utm_medium=link2&utm_source=uniquelinks&utlId=h9d80b6d037', icon: '📊' },
+  { title: 'AI & Product', desc: 'Agentic AI research and AI applications.', link: '#', icon: '🤖' },
+  { title: 'TAM', desc: 'Martech & Product education and tech account management.', link: 'https://drive.google.com/file/d/1JGqaze5XGf6gIpLSwycy98u3GpbC5BlI/view?usp=sharing', icon: '🙋‍♀️' },
 ];
 
 export const SOCIAL_LINKS = {
