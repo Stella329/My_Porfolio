@@ -59,7 +59,7 @@ const App: React.FC = () => {
               src={profilePic}
               alt="Jianying Wang"
               className="w-full h-full object-cover transition-all duration-700"
-              style={{ objectPosition: 'center 15%' }}
+              style={{ objectPosition: 'center 25%' }}
             />
           </div>
         </div>
