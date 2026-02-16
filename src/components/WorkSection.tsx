@@ -64,7 +64,7 @@ const WorkSection: React.FC = () => {
                   }
                 }}
               >
-                <span>Explore Details</span>
+                <span>Explore My Work</span>
                 <span className="transform group-hover:translate-x-1 transition-transform">→</span>
               </div>
             </div>

@@ -25,21 +25,21 @@ export const PROJECTS: ProjectItem[] = [
     link: '#'
   },
   {
-    id: '2',
-    title: 'Data & AI',
-    category: 'Data & AI',
-    description: 'Transform business challenges into intelligent solutions by leveraging deep data insights and cutting-edge AI applications.',
-    skills: 'Python, SQL, AI Agents and tools',
-    imageUrl: dataImg,
-    link: '#'
-  },
-  {
     id: '3',
     title: 'Product & Tech',
     category: 'Product & Tech',
     description: 'Accelerate Time-to-Value by breaking business-tech silos through integration solutions and expert technical translation.',
     skills: 'App dev, Stakeholder Mgmt,AI knowledge and learning',
     imageUrl: productImg,
+    link: '#'
+  },
+  {
+    id: '2',
+    title: 'Data & AI',
+    category: 'Data & AI',
+    description: 'Transform business challenges into intelligent solutions by leveraging deep data insights and cutting-edge AI applications.',
+    skills: 'Python, SQL, AI Agents and tools',
+    imageUrl: dataImg,
     link: '#'
   },
 ];
