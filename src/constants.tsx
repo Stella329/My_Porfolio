@@ -64,5 +64,5 @@ export const WEB_REPOS: ShowcaseRepo[] = [
 export const SOCIAL_LINKS = {
   linkedin: 'https://www.linkedin.com/in/jianying-wang-4b7532150', // Assuming this based on common patterns, or user can update
   github: 'https://github.com/Stella329',
-  email: 'mailto:[EMAIL_ADDRESS]',
+  email: 'mailto:[stella33299@gmail.com]',
 };
