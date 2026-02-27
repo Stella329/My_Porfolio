@@ -96,14 +96,7 @@ const App: React.FC = () => {
           </p>
         </div>
 
-        {/* 3 Tags at the bottom of Hero stack */}
-        <div className="flex flex-wrap justify-center gap-6">
-          {['Product', 'MarTech', 'Data & AI', 'Tech Liasion'].map(tag => (
-            <span key={tag} className="text-[13px] font-bold uppercase tracking-[0.4em] text-black/70 hover:text-[#480607] transition-colors cursor-default">
-              {tag}
-            </span>
-          ))}
-        </div>
+
       </section>
 
       {/* Work Section */}
