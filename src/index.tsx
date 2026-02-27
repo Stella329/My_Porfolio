@@ -1,3 +1,9 @@
+/**
+ * @file index.tsx
+ * @description The root entry point of the React application.
+ * Bootstraps the app, initializes Microsoft Clarity telemetry, 
+ * provides the ErrorBoundary context, and renders the `<App />` component.
+ */
 
 import React from 'react';
 import ReactDOM from 'react-dom/client';

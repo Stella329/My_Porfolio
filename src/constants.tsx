@@ -1,5 +1,29 @@
+/**
+ * @file constants.tsx
+ * @description Centralized configuration, data, and type definitions for the portfolio website.
+ * This file contains color palettes, project showcasing data (skills, descriptions, links), 
+ * social media links, and TypeScript interfaces to ensure consistency across components.
+ */
 
-import { ProjectItem, ShowcaseRepo } from './types';
+export type ParticleMode = 'idle' | 'circle' | 'lines';
+
+export interface ProjectItem {
+  id: string;
+  title: string;
+  category: string;
+  description: string;
+  imageUrl: string;
+  skills?: string;
+  link?: string;
+}
+
+export interface ShowcaseRepo {
+  id?: string;
+  title: string;
+  desc: string;
+  link: string;
+  icon: string;
+}
 
 export const COLORS = {
   bg: '#F9F8F6',
@@ -56,9 +80,9 @@ export const CODE_REPOS: ShowcaseRepo[] = [
 ];
 
 export const WEB_REPOS: ShowcaseRepo[] = [
-  { title: 'Data, Martech, Product', desc: 'API, Data & Product Solutions: strategy, integration and automation', link: 'https://www.canva.com/design/DAHBUjio2Vw/Ki6l05ZBnUJmHzqnW7LM1A/view?utm_content=DAHBUjio2Vw&utm_campaign=designshare&utm_medium=link2&utm_source=uniquelinks&utlId=h9d80b6d037', icon: '📊' },
-  { title: 'AI & Product', desc: 'Agentic AI research & AI applications.', link: '#', icon: '🤖' },
-  { title: 'TAM & Product', desc: 'Product/Tech Education & Tech Account Management.', link: 'https://drive.google.com/file/d/1JGqaze5XGf6gIpLSwycy98u3GpbC5BlI/view?usp=sharing', icon: '🙋‍♀️' },
+  { id: '1', title: 'Data, Martech, Product', desc: 'Product, API & Data Solutions Portfolio: strategy, integration and automation', link: 'https://www.canva.com/design/DAHBUjio2Vw/Ki6l05ZBnUJmHzqnW7LM1A/view?utm_content=DAHBUjio2Vw&utm_campaign=designshare&utm_medium=link2&utm_source=uniquelinks&utlId=h9d80b6d037', icon: '📊' },
+  { id: '3', title: 'TAM & Product', desc: 'A Guidebook Showcase about Product/Tech Education.', link: 'https://drive.google.com/file/d/1JGqaze5XGf6gIpLSwycy98u3GpbC5BlI/view?usp=sharing', icon: '🙋‍♀️' },
+  { id: '2', title: 'AI & Product', desc: 'Stay Tuned for Agentic AI research & AI applications Showcase!', link: '#', icon: '🤖' },
 ];
 
 export const SOCIAL_LINKS = {

@@ -1,7 +1,12 @@
+/**
+ * @file ParticleBackground.tsx
+ * @description Renders the dynamic, interactive particle background utilizing an HTML5 Canvas.
+ * Supports multiple visual states (idle, circle, lines) controlled via parent components,
+ * and reacts to standard user mouse movements.
+ */
 
 import React, { useEffect, useRef } from 'react';
-import { ParticleMode } from '../types';
-import { COLORS } from '../constants';
+import { ParticleMode, COLORS } from '../constants';
 
 interface Particle {
   x: number;
@@ -66,7 +71,7 @@ const ParticleBackground: React.FC<ParticleBackgroundProps> = ({ mode }) => {
     window.addEventListener('resize', resize);
     window.addEventListener('mousemove', handleMouseMove);
     window.addEventListener('mouseleave', handleMouseLeave);
-    
+
     resize();
 
     let animationFrameId: number;
@@ -103,7 +108,7 @@ const ParticleBackground: React.FC<ParticleBackgroundProps> = ({ mode }) => {
           const dx = p.x - mousePos.current.x;
           const dy = p.y - mousePos.current.y;
           const dist = Math.sqrt(dx * dx + dy * dy);
-          
+
           if (dist < 180) {
             const angle = Math.atan2(dy, dx) + 0.05;
             const targetRadius = 110;
@@ -134,13 +139,13 @@ const ParticleBackground: React.FC<ParticleBackgroundProps> = ({ mode }) => {
 
         ctx.beginPath();
         ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
-        
+
         if (isActive) {
           ctx.fillStyle = COLORS.accent; // #D9A299
         } else {
           ctx.fillStyle = 'rgba(0,0,0,0.06)';
         }
-        
+
         ctx.fill();
       });
 

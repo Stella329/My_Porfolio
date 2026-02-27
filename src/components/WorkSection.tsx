@@ -1,3 +1,9 @@
+/**
+ * @file WorkSection.tsx
+ * @description Renders the "Expertise" or "Work" section of the portfolio.
+ * Displays interactive cards detailing major expertise domains with hover effects that
+ * reveal descriptions, related skills, and navigation triggers to specific showcase items.
+ */
 
 import React from 'react';
 import { PROJECTS } from '../constants';
@@ -33,16 +39,7 @@ const WorkSection: React.FC = () => {
                     Skills: {project.skills}
                   </p>
                 )}
-
-
               </div>
-
-              {/* Category Tag: Always on top of the image */}
-              {/* <div className="absolute top-8 left-8 z-20">
-                <span className="bg-white/90 backdrop-blur-md px-4 py-1.5 rounded-full text-[10px] font-bold uppercase tracking-[0.2em] text-black">
-                  {project.category}
-                </span>
-              </div> */}
             </div>
 
             {/* Title: Always on the background board below the image */}
@@ -59,7 +56,7 @@ const WorkSection: React.FC = () => {
                   if (showcaseSection) {
                     showcaseSection.scrollIntoView({ behavior: 'smooth' });
                     setTimeout(() => {
-                      window.dispatchEvent(new CustomEvent('highlight-repo', { detail: { title: project.title } }));
+                      window.dispatchEvent(new CustomEvent('highlight-repo', { detail: { id: project.id } }));
                     }, 500);
                   }
                 }}

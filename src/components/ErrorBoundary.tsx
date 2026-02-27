@@ -1,3 +1,10 @@
+/**
+ * @file ErrorBoundary.tsx
+ * @description A React class component that acts as an error boundary.
+ * Catches JavaScript errors anywhere in their child component tree, logs those errors,
+ * and displays a fallback UI instead of crashing the whole component tree.
+ */
+
 import React, { Component, ErrorInfo, ReactNode } from 'react';
 
 interface Props {

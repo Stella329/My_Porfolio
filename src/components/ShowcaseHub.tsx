@@ -1,3 +1,9 @@
+/**
+ * @file ShowcaseHub.tsx
+ * @description Central hub for showcasing external works and projects.
+ * Organizes content into three distinct columns: Impacts/Solutions, Code Hub,
+ * and strategic highlights, with interactive hover states and scroll-to-highlight logic.
+ */
 
 import React from 'react';
 import { CODE_REPOS, WEB_REPOS } from '../constants';
@@ -8,14 +14,14 @@ const ShowcaseHub: React.FC = () => {
   React.useEffect(() => {
     const handleHighlight = (e: Event) => {
       const customEvent = e as CustomEvent;
-      const title = customEvent.detail?.title;
-      if (title) {
-        setHighlightedRepo(title);
+      const targetId = customEvent.detail?.id;
+      if (targetId) {
+        setHighlightedRepo(targetId);
         // Remove highlight after animation
         setTimeout(() => setHighlightedRepo(null), 2000);
 
         // Find and scroll to element
-        const element = document.getElementById(`repo-${title.replace(/\s+/g, '-').toLowerCase()}`);
+        const element = document.getElementById(`repo-${targetId}`);
         if (element) {
           element.scrollIntoView({ behavior: 'smooth', block: 'center' });
         }
@@ -37,16 +43,15 @@ const ShowcaseHub: React.FC = () => {
             <p className="text-[11px] text-[#D9A299] font-bold tracking-[0.3em] uppercase">Execution Gallery</p>
           </div>
         </div>
-        {/* Reduced spacing from space-y-8 to space-y-5 for tighter layout */}
-        {/* Removed max-height and overflow-y-auto to cancel scroll logic */}
+
         <div className="space-y-5">
           {WEB_REPOS.map((repo, i) => (
             <a
               key={i}
-              id={`repo-${repo.title.replace(/\s+/g, '-').toLowerCase()}`}
+              id={repo.id ? `repo-${repo.id}` : `repo-fallback-${i}`}
               href={repo.link}
-              className={`block group p-4 -mx-4 rounded-xl transition-all duration-500 ${highlightedRepo === repo.title
-                ? 'bg-[#D9A299]/20 shadow-lg scale-105 border-l-4 border-[#D9A299]'
+              className={`block group p-4 -mx-4 rounded-xl transition-all duration-500 ${highlightedRepo === repo.id
+                ? 'bg-[#D9A299]/20 shadow-lg scale-105 border-l-4 border-[#D9A299] animate-pulse'
                 : 'hover:bg-white/50'
                 }`}
             >
@@ -103,8 +108,8 @@ const ShowcaseHub: React.FC = () => {
             <p className="text-sm text-white/50 leading-relaxed font-medium">Being tech-agile with a proven ability to rapidly master emerging technologies and transform them into immediate, high-impact business solutions.</p>
           </div>
           <div className="group cursor-default">
-            <h4 className="font-bold text-sm text-[#D9A299] mb-4 tracking-[0.2em] uppercase">Data & Automation & Growth</h4>
-            <p className="text-sm text-white/50 leading-relaxed font-medium">End-to-end data automation and AI-powered growth by selecting optimal MarTech stacks and engineering seamless API integrations.</p>
+            <h4 className="font-bold text-sm text-[#D9A299] mb-4 tracking-[0.2em] uppercase">Product & Growth</h4>
+            <p className="text-sm text-white/50 leading-relaxed font-medium">End-to-end product automation and AI-powered growth, by selecting MarTech stacks and engineering seamless API integrations.</p>
           </div>
         </div>
       </div>

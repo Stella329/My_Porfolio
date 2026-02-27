@@ -1,10 +1,15 @@
+/**
+ * @file App.tsx
+ * @description The main layout and entry point for the single-page portfolio application.
+ * Manages global state such as the active particle background mode and orchestrates
+ * the rendering of major sections including Hero, Work/Expertise, Showcase, and Footer.
+ */
 
 import React, { useState } from 'react';
 import ParticleBackground from './components/ParticleBackground';
 import WorkSection from './components/WorkSection';
 import ShowcaseHub from './components/ShowcaseHub';
-import { ParticleMode } from './types';
-import { COLORS, SOCIAL_LINKS } from './constants';
+import { ParticleMode, COLORS, SOCIAL_LINKS } from './constants';
 import profilePic from './assets/profile-picture.jpg';
 
 const App: React.FC = () => {
