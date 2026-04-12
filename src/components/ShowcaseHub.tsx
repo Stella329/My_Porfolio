@@ -35,8 +35,8 @@ const ShowcaseHub: React.FC = () => {
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
       {/* Column 1: Impact */}
-      <div className="p-12 rounded-[3.5rem] border border-black/5 bg-white/30 hover:bg-white transition-all duration-500 shadow-sm hover:shadow-xl hover:shadow-black/5">
-        <div className="flex items-center gap-6 mb-14">
+      <div className="flex flex-col p-12 rounded-[3.5rem] border border-black/5 bg-white/30 hover:bg-white transition-all duration-500 shadow-sm hover:shadow-xl hover:shadow-black/5">
+        <div className="flex items-center gap-6 mb-9">
           <div className="w-16 h-16 rounded-3xl bg-[#DCC5B2]/20 flex items-center justify-center text-3xl">✨</div>
           <div>
             <h3 className="text-2xl font-bold tracking-tighter">Solutions</h3>
@@ -44,13 +44,13 @@ const ShowcaseHub: React.FC = () => {
           </div>
         </div>
 
-        <div className="space-y-5">
+        <div className="flex-1 max-h-[320px] overflow-y-auto pr-2 custom-scrollbar px-1 space-y-2">
           {WEB_REPOS.map((repo, i) => (
             <a
               key={i}
               id={repo.id ? `repo-${repo.id}` : `repo-fallback-${i}`}
               href={repo.link}
-              className={`block group p-4 -mx-4 rounded-xl transition-all duration-500 ${highlightedRepo === repo.id
+              className={`block group p-4 rounded-xl transition-all duration-500 ${highlightedRepo === repo.id
                 ? 'bg-[#D9A299]/20 shadow-lg scale-105 border-l-4 border-[#D9A299] animate-pulse'
                 : 'hover:bg-white/50'
                 }`}
@@ -66,20 +66,21 @@ const ShowcaseHub: React.FC = () => {
       </div>
 
       {/* Column 2: Code Hub */}
-      <div className="p-12 rounded-[3.5rem] border border-black/5 bg-white/30 hover:bg-white transition-all duration-500 shadow-sm hover:shadow-xl hover:shadow-black/5">
-        <div className="flex items-center gap-6 mb-14">
+      <div className="flex flex-col p-12 rounded-[3.5rem] border border-black/5 bg-white/30 hover:bg-white transition-all duration-500 shadow-sm hover:shadow-xl hover:shadow-black/5">
+        <div className="flex items-center gap-6 mb-9">
           <div className="w-16 h-16 rounded-3xl bg-[#DCC5B2]/20 flex items-center justify-center text-3xl">🐍</div>
           <div>
             <h3 className="text-2xl font-bold tracking-tighter">Code Hub</h3>
             <p className="text-[11px] text-[#D9A299] font-bold tracking-[0.3em] uppercase">Python & Frontend & Data</p>
           </div>
         </div>
-        <div className="space-y-8 max-h-[320px] overflow-y-auto pr-2 custom-scrollbar">
+        <div className="flex-1 max-h-[320px] overflow-y-auto pr-2 custom-scrollbar px-1 space-y-2">
           {CODE_REPOS.map((repo, i) => (
             <a
               key={i}
+              id={`repo-${repo.id}`}
               href={repo.link}
-              className="block group"
+              className="block group p-4 rounded-xl transition-all duration-500 hover:bg-white/50"
             >
               <div className="flex justify-between items-center mb-2">
                 <span className="font-bold text-lg tracking-tight group-hover:text-[#D9A299] transition-colors">{repo.title}</span>
@@ -92,17 +93,16 @@ const ShowcaseHub: React.FC = () => {
       </div>
 
       {/* Column 3: Solutions */}
-      <div className="bg-black p-12 rounded-[3.5rem] text-white overflow-hidden relative shadow-2xl">
+      <div className="flex flex-col bg-black p-12 rounded-[3.5rem] text-white overflow-hidden relative shadow-2xl">
         <div className="absolute top-0 right-0 w-48 h-48 bg-[#D9A299]/20 blur-[120px]"></div>
-        <div className="flex items-center gap-6 mb-14 relative z-10">
+        <div className="flex items-center gap-6 mb-9 relative z-10">
           <div className="w-16 h-16 rounded-3xl bg-white/5 border border-white/10 flex items-center justify-center text-3xl">🌱</div>
           <div>
             <h3 className="text-2xl font-bold tracking-tighter text-white">Impacts</h3>
             <p className="text-[11px] text-[#D9A299] font-bold tracking-[0.3em] uppercase">Lens & Features</p>
           </div>
         </div>
-        <div className="space-y-12 relative z-10">
-
+        <div className="flex-1 space-y-6 relative z-10 px-1">
           <div className="group cursor-default">
             <h4 className="font-bold text-sm text-[#D9A299] mb-4 tracking-[0.2em] uppercase">Tech Agility & Continuous Learning</h4>
             <p className="text-sm text-white/50 leading-relaxed font-medium">Being tech-agile with a proven ability to rapidly master emerging technologies and transform them into immediate, high-impact business solutions.</p>

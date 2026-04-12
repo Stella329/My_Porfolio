@@ -52,13 +52,7 @@ const WorkSection: React.FC = () => {
                 className="inline-flex items-center gap-2 text-[10px] font-bold uppercase tracking-[0.2em] text-black/40 hover:text-[#D9A299] transition-all opacity-0 group-hover:opacity-100 -translate-y-2 group-hover:translate-y-0 duration-500"
                 onClick={(e) => {
                   e.stopPropagation();
-                  const showcaseSection = document.getElementById('showcase');
-                  if (showcaseSection) {
-                    showcaseSection.scrollIntoView({ behavior: 'smooth' });
-                    setTimeout(() => {
-                      window.dispatchEvent(new CustomEvent('highlight-repo', { detail: { id: project.id } }));
-                    }, 500);
-                  }
+                  window.dispatchEvent(new CustomEvent('highlight-repo', { detail: { id: project.id } }));
                 }}
               >
                 <span>Explore My Work</span>
